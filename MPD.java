@@ -4,13 +4,17 @@ public class MPD {
 
     public static void createMPDArchive(String sourceFile, String archiveFile) {
         try (FileOutputStream fos = new FileOutputStream(archiveFile);
-             FileInputStream fis = new FileInputStream(sourceFile)) {
+             BufferedOutputStream bos = new BufferedOutputStream(fos);
+             FileInputStream fis = new FileInputStream(sourceFile);
+             BufferedInputStream bis = new BufferedInputStream(fis)) {
+
             String header = sourceFile + ";" + fis.available() + ";";
-            fos.write(header.getBytes());
+            bos.write(header.getBytes());
+
             byte[] buffer = new byte[1024];
             int length;
-            while ((length = fis.read(buffer)) > 0) {
-                fos.write(buffer, 0, length);
+            while ((length = bis.read(buffer)) > 0) {
+                bos.write(buffer, 0, length);
             }
             System.out.println("Архив в формате .mpd создан успешно!");
         } catch (IOException e) {
@@ -19,9 +23,11 @@ public class MPD {
     }
 
     public static boolean isMPDFormat(File file) {
-        try (FileInputStream fis = new FileInputStream(file)) {
+        try (FileInputStream fis = new FileInputStream(file);
+             BufferedInputStream bis = new BufferedInputStream(fis)) {
+
             byte[] headerBytes = new byte[1024];
-            int length = fis.read(headerBytes);
+            int length = bis.read(headerBytes);
             if (length > 0) {
                 String header = new String(headerBytes, 0, length).trim();
                 return header.contains(";");
@@ -37,15 +43,18 @@ public class MPD {
             System.out.println("Файл не соответствует формату .mpd");
             return;
         }
-        try (FileInputStream fis = new FileInputStream(file)) {
+        try (FileInputStream fis = new FileInputStream(file);
+             BufferedInputStream bis = new BufferedInputStream(fis)) {
+
             byte[] headerBytes = new byte[1024];
-            int headerLength = fis.read(headerBytes);
+            int headerLength = bis.read(headerBytes);
             String header = new String(headerBytes, 0, headerLength).trim();
             String[] headerParts = header.split(";");
             String fileName = headerParts[0];
             int fileSize = Integer.parseInt(headerParts[1]);
+
             byte[] fileContent = new byte[fileSize];
-            int contentLength = fis.read(fileContent);
+            int contentLength = bis.read(fileContent);
             if (contentLength > 0) {
                 System.out.println("Имя файла: " + fileName);
                 System.out.println("Размер файла: " + fileSize + " байт");
@@ -62,18 +71,23 @@ public class MPD {
             System.out.println("Файл не соответствует формату .mpd");
             return;
         }
-        try (FileInputStream fis = new FileInputStream(file)) {
+        try (FileInputStream fis = new FileInputStream(file);
+             BufferedInputStream bis = new BufferedInputStream(fis)) {
+
             byte[] headerBytes = new byte[1024];
-            int headerLength = fis.read(headerBytes);
+            int headerLength = bis.read(headerBytes);
             String header = new String(headerBytes, 0, headerLength).trim();
             String[] headerParts = header.split(";");
             String fileName = headerParts[0];
             int fileSize = Integer.parseInt(headerParts[1]);
+
             byte[] fileContent = new byte[fileSize];
-            int contentLength = fis.read(fileContent);
+            int contentLength = bis.read(fileContent);
             if (contentLength > 0) {
-                try (FileOutputStream fos = new FileOutputStream(fileName)) {
-                    fos.write(fileContent, 0, contentLength);
+                try (FileOutputStream fos = new FileOutputStream(fileName);
+                     BufferedOutputStream bos = new BufferedOutputStream(fos)) {
+
+                    bos.write(fileContent, 0, contentLength);
                     System.out.println("Файл " + fileName + " успешно распакован.");
                 }
             }
