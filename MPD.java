@@ -16,6 +16,7 @@ public class MPD {
             while ((length = bis.read(buffer)) > 0) {
                 bos.write(buffer, 0, length);
             }
+            // CREATED
             System.out.println("Архив в формате .mpd создан успешно!");
         } catch (IOException e) {
             e.printStackTrace();
