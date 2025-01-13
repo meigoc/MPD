@@ -11,7 +11,6 @@ public class MPD {
             String header = sourceFile + ";" + fis.available() + ";";
             bos.write(header.getBytes());
 
-            // deprecated (old)
             byte[] buffer = new byte[1024];
             int length;
             while ((length = bis.read(buffer)) > 0) {
