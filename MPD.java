@@ -1,5 +1,5 @@
 import java.io.*;
-// s
+
 public class MPD {
 
     public static void createMPDArchive(String sourceFile, String archiveFile) {
