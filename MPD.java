@@ -1,7 +1,7 @@
 import java.io.*;
 
 public class MPD {
-//нh//д авпапoз444444lдр33333333333222
+//9999нh//д авпапoз444444lдр33333333333222
     public static void createMPDArchive(String sourceFile, String archiveFile) {
         try (FileOutputStream fos = new FileOutputStream(archiveFile);
              BufferedOutputStream bos = new BufferedOutputStream(fos);
